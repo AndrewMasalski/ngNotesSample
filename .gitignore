@@ -1,0 +1,12 @@
+node_modules
+bower_components
+.idea
+.tmp
+*.suo
+*.ReSharper
+*.user
+*.iml
+webapiSample/.nuget
+webapiSample/packages
+webapiSample/NotesService/obj
+webapiSample/NotesService/bin
