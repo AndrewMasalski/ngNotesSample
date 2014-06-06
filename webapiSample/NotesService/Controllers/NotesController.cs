@@ -14,7 +14,7 @@ namespace NotesServiceApp.Controllers
         {
             using (var db = new FakeDbCtx())
             {
-                return db.Notes.Skip(pageNum*pageSize).Take(25).ToList();
+                return db.Notes.Skip(pageNum*pageSize).Take(pageSize).ToList();
             }
         }
 
