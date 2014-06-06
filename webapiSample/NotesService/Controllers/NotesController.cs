@@ -1,4 +1,5 @@
-﻿using System.Web.Http.Cors;
+﻿using System;
+using System.Web.Http.Cors;
 using NotesServiceApp.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,25 +10,44 @@ namespace NotesServiceApp.Controllers
     [EnableCors("*", "*", "*")]
     public class NotesController : ApiController
     {
-        private readonly Note[] notes =
-        { 
-            new Note { Id = 1, Title = "Kill all humans", Description = "With deadly virus or something..." }, 
-            new Note { Id = 2, Title = "Ressurect all humans", Description = "Virus will do ok" }, 
-        };
-
-        public IEnumerable<Note> GetAllNotes()
+        public IEnumerable<Note> GetAllNotes(int pageNum = 0, int pageSize = 25)
         {
-            return notes;
+            using (var db = new FakeDbCtx())
+            {
+                return db.Notes.Skip(pageNum*pageSize).Take(25).ToList();
+            }
         }
 
-        public IHttpActionResult GetNotes(int id)
+        public IHttpActionResult GetNote(int id)
         {
-            var note = notes.FirstOrDefault(p => p.Id == id);
-            if (note == null)
+            using (var db = new FakeDbCtx())
             {
-                return NotFound();
+                var note = db.Notes.FirstOrDefault(p => p.Id == id);
+                if (note == null)
+                {
+                    return NotFound();
+                }
+                return Ok(note);
             }
-            return Ok(note);
         }
     }
+
+    public class FakeDbCtx : IDisposable
+    {
+        public FakeDbCtx()
+        {
+            Notes = new List<Note>();
+            for (var i = 0; i < 10000; i++)
+                Notes.Add(new Note() { Id = i, Title = "Note" + i });
+        }
+
+        public List<Note> Notes { get; private set; }
+
+        public void Dispose()
+        {
+            Notes.Clear();
+        }
+    }
+
+
 }
