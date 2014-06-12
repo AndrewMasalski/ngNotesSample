@@ -23,10 +23,23 @@ namespace NotesServiceApp.Controllers
             using (var db = new FakeDbCtx())
             {
                 var note = db.Notes.FirstOrDefault(p => p.Id == id);
-                if (note == null)
-                {
-                    return NotFound();
-                }
+                if (note == null) return NotFound();
+                return Ok(note);
+            }
+        }
+
+        public IHttpActionResult PutNote(int id, Note note)
+        {
+            using (var db = new FakeDbCtx())
+            {
+                var found = db.Notes.FirstOrDefault(n => n.Id == id);
+                if (found == null) return NotFound();
+
+                found.Title = note.Title;
+                found.Description = note.Description;
+                db.Entry(course).State = EntityState.Modified;
+                db.SaveChanges();
+
                 return Ok(note);
             }
         }
