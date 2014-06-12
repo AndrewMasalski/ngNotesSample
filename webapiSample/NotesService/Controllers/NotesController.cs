@@ -37,7 +37,7 @@ namespace NotesServiceApp.Controllers
             {
                 var found = db.Notes.FirstOrDefault(n => n.Id == id);
                 if (found == null) return NotFound();
-                // option 1 validation before any code
+                // option 1: validation before any code
                 var errors = new List<string>();
                 if (note.Id == 0)
                     errors.Add("Id cannot be 0");
@@ -49,7 +49,7 @@ namespace NotesServiceApp.Controllers
                 found.Title = note.Title;
                 found.Description = note.Description;
 
-                // option 1 validation of already Entity with new values
+                // option 2: validation of already Entity with new values
                 if (found.HasValidationErrors())
                     return new GlogErrorsResult(found);
 
