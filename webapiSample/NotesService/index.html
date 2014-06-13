@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <script type="text/javascript">
+            var host = "http://localhost:47503";
+            function httpGet(theUrl) {
+                var xmlHttp = new XMLHttpRequest();
+                var url = host + theUrl;
+                xmlHttp.open("GET", url, false);
+                xmlHttp.send(null);
+                try {
+                    return JSON.parse(xmlHttp.responseText);
+                } catch (e) {
+                    console.log(e);
+                    return [];
+                } 
+            }
+            
+            function addEvent(element, event, fn) {
+                if (element.addEventListener)
+                    element.addEventListener(event, fn, false);
+                else if (element.attachEvent)
+                    element.attachEvent('on' + event, fn);
+            }
+            
+            addEvent(window, 'load', function () {
+                var results = document.getElementById("results");
+                var notes = httpGet("/api/Notes/ByIds?ids=1;2;3");
+                for (var i = 0; i < notes.length; i++) {
+                    var newDiv = document.createElement('li');
+                    newDiv.innerHTML = notes[i].Id  + ": " + notes[i].Title;
+                    results.appendChild(newDiv);
+                }
+            });
+        </script>
+        <title>WebService main</title>
+    </head>
+    <body>
+        <div>/api/Notes/ByIds?ids=1;2;3</div>
+        <ul id="results"></ul>
+    </body>
+</html>

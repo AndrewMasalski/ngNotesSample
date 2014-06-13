@@ -29,14 +29,15 @@ namespace NotesServiceApp.Controllers
             }
         }
 
-        [ArrayInput("id", Separator = ';')]
-        public IHttpActionResult GetNotes(int[] ids)
+        [HttpGet]
+        [ArrayInput("ids", Separator = ';')]
+        public IHttpActionResult ByIds(int[] ids)
         {
             using (var db = new FakeDbCtx())
             {
-                var note = db.Notes.FirstOrDefault(p => ids.Contains(p.Id));
-                if (note == null) return NotFound();
-                return Ok(note);
+                var filtered = db.Notes.Where(p => ids.Contains(p.Id)).ToList();
+                if (filtered.Count == 0) return NotFound();
+                return Ok(filtered);
             }
         }
 

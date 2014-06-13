@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
@@ -27,7 +28,14 @@ namespace GlogWebService.Controllers
                 else if (actionContext.ControllerContext.Request.RequestUri.ParseQueryString()[_parameterName] != null)
                     parameters = actionContext.ControllerContext.Request.RequestUri.ParseQueryString()[_parameterName];
 
-                actionContext.ActionArguments[_parameterName] = parameters.Split(Separator).Select(int.Parse).ToArray();
+                try
+                {
+                    actionContext.ActionArguments[_parameterName] = parameters.Split(Separator).Select(int.Parse).ToArray();
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("Wrong array param", e);
+                }
             }
         }
 
