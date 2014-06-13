@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading;
+using GlogWebService.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NotesServiceApp.Controllers;
 using NotesServiceApp.Models;
 
 namespace ApiTests

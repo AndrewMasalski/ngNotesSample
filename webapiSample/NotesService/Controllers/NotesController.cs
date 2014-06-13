@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http.Cors;
-using System.Web.Http.Results;
+using GlogWebService.Controllers;
 using NotesServiceApp.Models;
 using System.Collections.Generic;
 using System.Linq;

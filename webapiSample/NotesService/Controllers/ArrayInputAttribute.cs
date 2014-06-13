@@ -1,10 +1,9 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Net.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 
-namespace NotesServiceApp.Controllers
+namespace GlogWebService.Controllers
 {
     public class ArrayInputAttribute : ActionFilterAttribute
     {
