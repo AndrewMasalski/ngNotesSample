@@ -31,16 +31,31 @@ namespace NotesServiceApp.Controllers
             }
         }
 
+        [ArrayInput("id", Separator = ';')]
+        public IHttpActionResult GetNotes(int[] ids)
+        {
+            using (var db = new FakeDbCtx())
+            {
+                var note = db.Notes.FirstOrDefault(p => ids.Contains(p.Id));
+                if (note == null) return NotFound();
+                return Ok(note);
+            }
+        }
+
+        public IHttpActionResult Add(Note note)
+        {
+            return Ok(note);
+        }
+
         public IHttpActionResult PutNote(int id, Note note)
         {
             using (var db = new FakeDbCtx())
             {
                 var found = db.Notes.FirstOrDefault(n => n.Id == id);
                 if (found == null) return NotFound();
-                // option 1: validation before any code
                 var errors = new List<string>();
-                if (note.Id == 0)
-                    errors.Add("Id cannot be 0");
+                if (note.Id < 0)
+                    errors.Add("Id cannot be less than 0");
                 if (string.IsNullOrEmpty(note.Title))
                     errors.Add("Title cannot be empty");
                 if (errors.Any())
@@ -49,15 +64,11 @@ namespace NotesServiceApp.Controllers
                 found.Title = note.Title;
                 found.Description = note.Description;
 
-                // option 2: validation of already Entity with new values
-                if (found.HasValidationErrors())
-                    return new GlogErrorsResult(found);
-
                 // send updated Entity to DB
 //                db.Entry(course).State = EntityState.Modified;
 //                db.SaveChanges();
 
-                return Ok(note);
+                return Ok(found);
             }
         }
     }
