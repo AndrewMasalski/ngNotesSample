@@ -1,7 +1,13 @@
-var app = angular.module('Reception', ['ngMockE2E']);
+var app = angular.module('Reception', ['ngMockE2E', 'ngLocale','cgBusy']);
+
+app.value('cgBusyDefaults',{
+    message:'Loading...',
+    backdrop: true
+});
 
 app.run(function ($httpBackend, mocks) {
     $httpBackend.whenGET('/api/getUsersData').respond(mocks.usersData);
+    $httpBackend.whenGET(/\.html$/).passThrough();
 });
 
 app.constant('mocks', {
@@ -15,13 +21,22 @@ app.constant('mocks', {
     }
 });
 
-app.controller('TableController', function ($scope, $http) {
+app.controller('TableController', function ($scope, $http, $q) {
     var parse = function (str) {
         var number = parseInt(str);
         return isNaN(number) ? 0 : number;
     };
 
-    $http.get('/api/getUsersData').then(function (response) {
+    var fakeTimeOut = function (promise) {
+        var deferred = $q.defer();
+        setTimeout(function () {
+            deferred.resolve(promise);
+        }, 1333);
+        return deferred.promise;
+    };
+
+    $scope.loadingPromise = fakeTimeOut($http.get('/api/getUsersData'));
+    $scope.loadingPromise.then(function (response) {
         var usersData = response.data;
         _.forEach(usersData.worktime, function (user) {
             user.summary = _.reduce(user.time, function (a, b) {

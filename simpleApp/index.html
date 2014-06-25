@@ -3,31 +3,38 @@
 <head>
     <title>simpleApp</title>
     <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet"/>
+    <link href="bower_components/angular-busy/dist/angular-busy.min.css" rel="stylesheet"/>
+
     <script src="bower_components/lodash/dist/lodash.min.js"></script>
     <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-busy/dist/angular-busy.min.js"></script>
     <script src="bower_components/angular-mocks/angular-mocks.js"></script>
     <script src="app.js"></script>
 </head>
 
 <body ng-controller="TableController">
 <h1>Users data</h1>
-<table class="table table-bordered">
-    <thead>
-    <th></th>
-    <th ng-repeat="date in usersData.dates">{{date}}</th>
-    <th></th>
-    </thead>
-    <tbody>
-    <tr ng-repeat="user in usersData.worktime">
-        <td>{{user.name}}</td>
-        <td ng-repeat="time in user.time track by $index" ng-class="{ 'bg-danger' : time == '' || time == null }">
-            {{time}}
-        </td>
-        <td>{{user.summary}}</td>
-    </tr>
-    </tbody>
-</table>
-<div>{{error}}</div>
+
+<div>
+    <div cg-busy="loadingPromise"></div>
+    <table class="table table-bordered">
+        <thead>
+        <th></th>
+        <th ng-repeat="date in usersData.dates">{{date}}</th>
+        <th></th>
+        </thead>
+        <tbody>
+        <tr ng-repeat="user in usersData.worktime">
+            <td>{{user.name}}</td>
+            <td ng-repeat="time in user.time track by $index" ng-class="{ 'bg-danger' : time == '' || time == null }">
+                {{time}}
+            </td>
+            <td>{{user.summary}}</td>
+        </tr>
+        </tbody>
+    </table>
+    <div>{{error}}</div>
+</div>
 </body>
 
 
