@@ -1,9 +1,4 @@
-var app = angular.module('Reception', ['ngMockE2E', 'ngLocale','cgBusy']);
-
-app.value('cgBusyDefaults',{
-    message:'Loading...',
-    backdrop: true
-});
+var app = angular.module('Reception', ['ngMockE2E', 'cgBusy']);
 
 app.run(function ($httpBackend, mocks) {
     $httpBackend.whenGET('/api/getUsersData').respond(mocks.usersData);
@@ -47,4 +42,8 @@ app.controller('TableController', function ($scope, $http, $q) {
     }, function (reason) {
         $scope.error = reason;
     });
+
+    $scope.reload = function () {
+        $scope.loadingPromise = fakeTimeOut($http.get('/api/getUsersData'));
+    }
 });

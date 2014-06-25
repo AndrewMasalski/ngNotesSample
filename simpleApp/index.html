@@ -15,24 +15,27 @@
 <body ng-controller="TableController">
 <h1>Users data</h1>
 
+<button ng-click="reload()">Reload</button>
 <div>
-    <div cg-busy="loadingPromise"></div>
-    <table class="table table-bordered">
-        <thead>
-        <th></th>
-        <th ng-repeat="date in usersData.dates">{{date}}</th>
-        <th></th>
-        </thead>
-        <tbody>
-        <tr ng-repeat="user in usersData.worktime">
-            <td>{{user.name}}</td>
-            <td ng-repeat="time in user.time track by $index" ng-class="{ 'bg-danger' : time == '' || time == null }">
-                {{time}}
-            </td>
-            <td>{{user.summary}}</td>
-        </tr>
-        </tbody>
-    </table>
+    <div cg-busy="{promise: loadingPromise, message:'Загрузка...'}">
+        <table class="table table-bordered">
+            <thead>
+            <th></th>
+            <th ng-repeat="date in usersData.dates">{{date}}</th>
+            <th></th>
+            </thead>
+            <tbody>
+            <tr ng-repeat="user in usersData.worktime">
+                <td>{{user.name}}</td>
+                <td ng-repeat="time in user.time track by $index"
+                    ng-class="{ 'bg-danger' : time == '' || time == null }">
+                    {{time}}
+                </td>
+                <td>{{user.summary}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
     <div>{{error}}</div>
 </div>
 </body>
